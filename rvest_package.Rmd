@@ -1,0 +1,67 @@
+---
+title: "Rvest"
+author: "Clarissa Boyajian"
+date: "4/20/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(rvest)
+```
+
+
+Point to URL
+
+```{r}
+url <- "https://ucsb-meds.github.io/overview.html"
+
+html <- read_html(url)
+```
+
+
+Pull by type of element on page (ex: header, paragraph, table, etc.)
+
+```{r}
+paragraphs <- 
+  html %>% 
+  html_elements("p") # unhelpful format
+
+paragraph_vector <- 
+  paragraphs %>% 
+  html_text() # get into vector format
+```
+
+```{r}
+title <- html %>% 
+  html_elements("title")
+```
+
+```{r}
+level2_headers <- html %>% 
+  html_elements("h2")
+
+level2_headers %>% html_text()
+```
+
+
+```{r}
+# not great way to to this
+tables <- html %>% html_elements("table") 
+
+# better option, gives you output as a tibble
+tables_clean <- html_table(html)
+
+tables_clean[[1]] # call first table from the page
+```
+
+
+
+
+
+
+
+
+
