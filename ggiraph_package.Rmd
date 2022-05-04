@@ -1,0 +1,68 @@
+---
+title: "ggiraph example"
+author: "Clarissa Boyajian"
+date: "5/4/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(ggiraph)
+library(palmerpenguins)
+library(patchwork)
+```
+
+
+```{r}
+ggplot(data = penguins,
+       aes(x = flipper_length_mm,
+           y = body_mass_g)) +
+  geom_point(aes(color = species)) +
+  theme_minimal()
+```
+
+# make interactive with `ggiraph`
+
+```{r}
+p1 <- ggplot(data = penguins,
+             aes(x = flipper_length_mm,
+                 y = body_mass_g)) +
+  geom_point_interactive(aes(color = species, 
+                             tooltip = species,
+                             data_id = species)) +
+  theme_minimal()
+
+p2 <- ggplot(data = penguins,
+             aes(x = bill_depth_mm,
+                 y = bill_length_mm)) +
+  geom_point_interactive(aes(color = species, 
+                             tooltip = species,
+                             data_id = species)) +
+  theme_minimal()
+```
+
+
+```{r}
+girafe(ggobj = p1,
+       options = list(
+         opts_hover(css = "fill:black; stroke:goldenrod;"),
+         opts_hover_inv(css = "opacity:0.2")
+       ))
+```
+
+
+
+```{r}
+girafe(ggobj = (p1 + p2),
+       options = list(
+         opts_hover(css = "fill:black;"),
+         opts_hover_inv(css = "opacity:0.2")
+       ),
+       width_svg = 8,
+       height_svg = 4)
+```
+
+
+
