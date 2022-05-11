@@ -1,0 +1,21 @@
+---
+title: "Danielle Navarro’s jasmines package"
+author: "Clarissa Boyajian"
+date: "5/11/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(jasmines)
+```
+
+```{r}
+use_seed(100) %>% 
+  entity_droplet(grain = 1000) %>% 
+  unfold_loop(radius = .2) %>% 
+  style_ribbon(background = "black", palette = "rainbow")
+```
+
