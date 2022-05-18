@@ -1,0 +1,61 @@
+---
+title: "Tesseract"
+author: "Clarissa Boyajian"
+date: "5/18/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(tesseract)
+library(magick)
+```
+
+
+```{r}
+img <- image_read("chicken-wings.jpg")
+
+image_ggplot(img)
+```
+
+```{r}
+img %>% 
+  image_crop(geometry_area(0, 0, 20, 120)) %>% 
+  image_ggplot()
+```
+
+```{r}
+# modify engine to only recognize decimal places, numbers, and spaces
+num_only <- tesseract(
+  options = list(tessedit_char_whitelist = c(".0123456789 "))
+)
+
+prices <- img %>% 
+  image_crop(geometry_area(0, 0, 20, 120)) %>% 
+  ocr(engine = num_only)
+
+prices # creates list of all numbers on each row with `\n` at line breaks
+```
+
+```{r}
+## stringer
+# `str_trim()` remove extra white space at beginning/end of all strings
+# `str_squish()` remove extra white space at beginning/end and make anything more than 1 space into just 1 space
+
+wings_df <- 
+  prices %>% 
+  str_split(pattern = "\n") %>%  # split single vector into different elements of vector
+  data.frame() %>% 
+  rename("prices" = 1) %>% 
+  mutate(prices = str_squish(prices)) %>% # remove white space more than 1 space
+  separate(prices, 
+           into = c("units_1", "price_1", "units_2", "price_2"), 
+           sep = " ") # separate into four columns based on where spaces are
+```
+
+
+
+
+
