@@ -1,0 +1,55 @@
+---
+title: "Pins example"
+author: "Clarissa Boyajian"
+date: "5/25/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(pins)
+```
+
+
+```{r}
+meds_2022 <- tribble(
+  ~name, ~shows,
+  "Desik", "sandals",
+  "Conner", "sandals",
+  "Dan", "indoors",
+  "Paloma", "tennies"
+)
+```
+
+# make pin board
+not code you would need to keep a record of
+
+```{r}
+awesome_board <- board_local()
+# can specify path of where to put the pin board withinin `board_local()` function
+```
+
+
+```{r}
+# add object to a the pin board
+awesome_board %>% 
+  pin_write(meds_2022, "meds_2022", versioned = TRUE)
+```
+
+
+```{r}
+awesome_board %>% pin_read("meds_2022")
+```
+```{r}
+# look at different versions of the data
+awesome_board %>% pin_versions("meds_2022")
+```
+
+
+```{r}
+awesome_board %>% pin_read("meds_2022", version = "20220525T231118Z-737bd")
+```
+
+Can add URLs and models to a pin boards
